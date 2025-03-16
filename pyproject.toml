@@ -1,21 +1,21 @@
 [project]
-name = "myapp"
-version = "0.1.0"
-description = ""
+name = "MatrixCalc"
+version = "1.6.9"
+description = "Calculates"
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-    { name = "Flet developer", email = "you@example.com" }
+    { name = "NeLoh", email = "criper294@gmail.com" }
 ]
 dependencies = [
   "flet"
 ]
 
 [tool.flet]
-org = "com.mycompany"
-product = "MyApp"
-company = "My Company"
-copyright = "Copyright (C) 2025 by My Company"
+org = "com.NeLoh"
+product = "MatrixCalc"
+company = "NeLoh"
+copyright = "Copyleft (C) 2025 by NeLoh"
 
 [tool.flet.app]
 path = "app"
