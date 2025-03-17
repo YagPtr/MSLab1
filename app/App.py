@@ -10,7 +10,8 @@ class Page(ft.Column):
             with open(e.files[0].path, 'r', encoding='utf-8') as file:
                 rows = int(file.readline().strip())
                 cols = int(file.readline().strip())
-
+                self.first_player_amount.value=rows
+                self.second_player_amount.value=cols
                 matrix = []
                 for _ in range(rows):
                     line = file.readline().strip()
@@ -45,9 +46,9 @@ class Page(ft.Column):
             on_click=lambda _: self.pick_files_dialog2.get_directory_path(),
         )
 
-
+        self.button_visible_matrix=ft.Checkbox("Отображение",value=True)
         self.first_player_amount=ft.TextField(label='Первый',value=5,width=70)
-        self.second_player_amount=ft.TextField(label='Второй',value=100,width=70)
+        self.second_player_amount=ft.TextField(label='Второй',value=5,width=70)
         self.max_for_rand=ft.TextField(label='Макс',value=5,width=70)
         self.min_for_rand = ft.TextField(label='Мин', value=0, width=70)
         self.table=[[random.uniform(int(self.min_for_rand.value),int(self.max_for_rand.value) ) for i in range(int(self.second_player_amount.value))] for j in range(int(self.first_player_amount.value))]
@@ -57,7 +58,7 @@ class Page(ft.Column):
         self.button_refresh=ft.ElevatedButton("Обновить таблицу",on_click=self.refresh_table)
         self.button_minmax = ft.ElevatedButton("М/М", on_click=self.out_minimax)
         self.ManageButtons=ft.Row([self.button_load_file,self.button_create_matrix,self.button_load_into_file])
-        self.ManageButtons2=ft.Row([self.button_minmax,self.button_refresh,self.button_chose_dir])
+        self.ManageButtons2=ft.Row([self.button_minmax,self.button_visible_matrix,self.button_chose_dir])
         self.PlayerRows=ft.Row([self.first_player_amount,self.second_player_amount,self.min_for_rand,self.max_for_rand])
         self.create_matrix('')
 
@@ -70,11 +71,16 @@ class Page(ft.Column):
         print("this one")
         self.table=[[random.uniform(int(self.min_for_rand.value),int(self.max_for_rand.value) ) for i in range(int(self.second_player_amount.value))] for j in range(int(self.first_player_amount.value))]
         self.Matrix=matrix.Matrix(int(self.first_player_amount.value),int(self.second_player_amount.value),self.table)
-        self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+        if self.button_visible_matrix.value:
+            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
                                       offset=ft.Offset(0.03, 0.05)),
                          ft.Row([ft.InteractiveViewer(self.Matrix,
-                                                      boundary_margin=ft.margin.only(0, 0, 100000, 100000),width=10000,height=10000)])]
-
+                                                      boundary_margin=ft.margin.only(0, 0, 100000, 100000), width=10000,
+                                                      height=10000)])]
+        else:
+            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+                                          offset=ft.Offset(0.03, 0.05)),
+                             ]
     def update_matrix(self,e):
         print("update")
         self.create_matrix(e)
@@ -84,11 +90,16 @@ class Page(ft.Column):
         print("another one")
         self.Matrix = matrix.Matrix(int(self.first_player_amount.value), int(self.second_player_amount.value),
                                     self.table)
-        self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+        if self.button_visible_matrix.value:
+            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
                                       offset=ft.Offset(0.03, 0.05)),
                          ft.Row([ft.InteractiveViewer(self.Matrix,
                                                       boundary_margin=ft.margin.only(0, 0, 100000, 100000), width=10000,
                                                       height=10000)])]
+        else:
+            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+                                          offset=ft.Offset(0.03, 0.05)),
+                             ]
         self.update()
 
 
@@ -142,3 +153,15 @@ class Page(ft.Column):
                 self.table[i-1][j-1]=row.controls[j].value
             # print("\n")
 
+    # def save_test(self,e):
+    #     try:
+    #         app_data_path = os.getenv("FLET_APP_STORAGE_DATA")
+    #         my_file_path = os.path.join(app_data_path, "test_file.txt")
+    #     except Exception as e:
+    #         self.page.open(ft.AlertDialog(content=ft.Text(str(e) + my_file_path)))
+    #     try:
+    #         with open(my_file_path, "w") as f:
+    #             f.write("Some file content...")
+    #         self.page.open(ft.AlertDialog(content=ft.Text(my_file_path)))
+    #     except Exception as e:
+    #         self.page.open(ft.AlertDialog(content=ft.Text(str(e)+my_file_path)))
