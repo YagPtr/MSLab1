@@ -1,6 +1,7 @@
 import random
 import os
 import flet as ft
+
 import matrix
 class Page(ft.Column):
     def __init__(self,page:ft.Page):
@@ -72,14 +73,14 @@ class Page(ft.Column):
         self.table=[[random.uniform(int(self.min_for_rand.value),int(self.max_for_rand.value) ) for i in range(int(self.second_player_amount.value))] for j in range(int(self.first_player_amount.value))]
         self.Matrix=matrix.Matrix(int(self.first_player_amount.value),int(self.second_player_amount.value),self.table)
         if self.button_visible_matrix.value:
-            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
-                                      offset=ft.Offset(0.03, 0.05)),
-                         ft.Row([ft.InteractiveViewer(self.Matrix,
+            self.controls = [ft.Container(ft.Column([ft.Container(height=30),self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+                                      offset=ft.Offset(0.03,0)),ft.Container(height=20,bgcolor=ft.colors.BLACK),
+                         ft.Row([ft.Container(width=30,bgcolor=ft.colors.BLACK),ft.InteractiveViewer(self.Matrix,
                                                       boundary_margin=ft.margin.only(0, 0, 100000, 100000), width=10000,
                                                       height=10000)])]
         else:
-            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
-                                          offset=ft.Offset(0.03, 0.05)),
+            self.controls = [ft.Container(ft.Column([ft.Container(height=30),self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+                                          offset=ft.Offset(0.03, 0)),
                              ]
     def update_matrix(self,e):
         print("update")
@@ -91,14 +92,20 @@ class Page(ft.Column):
         self.Matrix = matrix.Matrix(int(self.first_player_amount.value), int(self.second_player_amount.value),
                                     self.table)
         if self.button_visible_matrix.value:
-            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
-                                      offset=ft.Offset(0.03, 0.05)),
-                         ft.Row([ft.InteractiveViewer(self.Matrix,
-                                                      boundary_margin=ft.margin.only(0, 0, 100000, 100000), width=10000,
-                                                      height=10000)])]
+            self.controls = [ft.Container(
+                ft.Column([ft.Container(height=30), self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+                offset=ft.Offset(0.03, 0)), ft.Container(height=20, bgcolor=ft.colors.BLACK),
+                             ft.Row([ft.Container(width=30, bgcolor=ft.colors.BLACK), ft.InteractiveViewer(self.Matrix,
+                                                                                                           boundary_margin=ft.margin.only(
+                                                                                                               0, 0,
+                                                                                                               100000,
+                                                                                                               100000),
+                                                                                                           width=10000,
+                                                                                                           height=10000)])]
         else:
-            self.controls = [ft.Container(ft.Column([self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
-                                          offset=ft.Offset(0.03, 0.05)),
+            self.controls = [ft.Container(
+                ft.Column([ft.Container(height=30), self.ManageButtons, self.ManageButtons2, self.PlayerRows]),
+                offset=ft.Offset(0.03, 0)),
                              ]
         self.update()
 
@@ -151,17 +158,3 @@ class Page(ft.Column):
             for j in range(1,int(self.second_player_amount.value)+1):
                 # print(row.controls[j].value)
                 self.table[i-1][j-1]=row.controls[j].value
-            # print("\n")
-
-    # def save_test(self,e):
-    #     try:
-    #         app_data_path = os.getenv("FLET_APP_STORAGE_DATA")
-    #         my_file_path = os.path.join(app_data_path, "test_file.txt")
-    #     except Exception as e:
-    #         self.page.open(ft.AlertDialog(content=ft.Text(str(e) + my_file_path)))
-    #     try:
-    #         with open(my_file_path, "w") as f:
-    #             f.write("Some file content...")
-    #         self.page.open(ft.AlertDialog(content=ft.Text(my_file_path)))
-    #     except Exception as e:
-    #         self.page.open(ft.AlertDialog(content=ft.Text(str(e)+my_file_path)))
